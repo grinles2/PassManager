@@ -29,6 +29,27 @@ def clearFile():
         with open('password.txt', 'w'):
             pass
 
+
+def clearPass():
+    answer = mb.askyesno(title="Вопрос",message="Вы уверены?")
+    if answer:
+        with open('GenPass.txt', 'w'):
+            pass
+
+
+def deleteLastPass():
+    answer1 = mb.askyesno(title="Вопрос", message="Вы уверены?")
+    if answer1:
+        with open('GenPass.txt', 'r') as f:
+            lines = f.readlines()
+            lines = lines[:-1]
+
+        with open('password.txt', 'w') as f:
+            f.writelines(lines)
+
+
+
+
 def deleteLast():
     answer1 = mb.askyesno(title="Вопрос", message="Вы уверены?")
     if answer1:
@@ -77,7 +98,6 @@ filemenu = Menu(mainmenu, tearoff=0)
 filemenu.add_command(label="Очистить Все", command= clearFile)
 filemenu.add_command(label="Удалить Последний", command= deleteLast)
 
-
 helpmenu = Menu(mainmenu, tearoff=0)
 helpmenu.add_command(label="Серый фон", command= BlackBG)
 helpmenu.add_command(label="Бирюзовый Фон", command= CyanBG)
@@ -85,12 +105,17 @@ helpmenu.add_command(label="Красный фон", command= RedBG)
 helpmenu.add_command(label="Жёлтый фон", command= YellowBG)
 
 
+passwordList = Menu(mainmenu, tearoff=0)
+passwordList.add_command(label="Очистить Сохраннёные Пароли", command= clearPass)
+passwordList.add_command(label="Удалить последний пароль", command= deleteLastPass)
+
 
 window = Menu(mainmenu, tearoff=0)
 window.add_command(label="Прочитать", command= readEula)
 
 root.config(menu=mainmenu)
 mainmenu.add_cascade(label="Аккаунты", menu=filemenu)
+mainmenu.add_cascade(label="Пароли", menu=passwordList)
 mainmenu.add_cascade(label="Фон", menu=helpmenu)
 #mainmenu.add_cascade(label="EULA", menu=window)
 
@@ -268,7 +293,7 @@ def SavingPass():
     root.clipboard_clear()
     root.clipboard_append(Pass) # вставить в буфер обмена
     print(Pass)
-    with open("passGen.txt", "a", encoding="UTF-8") as file: # записываем пароль
+    with open("GenPass.txt", "a", encoding="UTF-8") as file: # записываем пароль
         file.write(f"{PassPrefix} --->>> {Pass}\n")
 
 alphabet = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
@@ -301,7 +326,7 @@ e.place(relx= 0.5, y=490, anchor=CENTER)  # координаты текстов�
 btn = Button(root, text="Сгенерировать", font= ("Seymour One", 17, "bold"), command=randomize) # отпровляемся к функц randomize
 btn.place(relx=0.2, y=570, anchor= CENTER)
 
-btn = Button(root, text="Сохранить Пароль", font= ("Seymour One", 17, "bold"), command=SavePass) # отпровляемся к функц SavePass
+btn = Button(root, text="Сохранить Пароль", font= ("Seymour One", 17, "bold"), command=SavingPass) # отпровляемся к функц SavePass
 btn.place(relx=0.7, y=570, anchor= CENTER)
 
 
