@@ -2,8 +2,9 @@
 
 from tkinter import *
 from random import choice
-from win10toast import ToastNotifier
-toast = ToastNotifier()
+from plyer import notification
+#from win10toast import ToastNotifier
+#toast = ToastNotifier()
 
 
 
@@ -18,14 +19,15 @@ def SavePass():
         file.write(f"{NameOfService} --->>> {thePass}\n")
         root.clipboard_clear()
         root.clipboard_append(thePass)  # вставить в буфер обмена
-        toast.show_toast("Python Manager", "Пароль Сохранён в буфер обмена", "LOGO.ico", duration=10, threaded=True)
+        #toast.show_toast("Python Manager", "Пароль Сохранён в буфер обмена", "LOGO.ico")
+        notification.notify(message="Пароль скопирован", app_icon="logo.ico")
 
 
 root = Tk()
 root.title("Менеджер Паролей")
 root.geometry("600x600")
 root.config(bg = "cyan")
-root.iconbitmap('logo.ico') # лого
+root.iconbitmap('logo1.ico') # лого
 root.resizable(width=False, height=False) # запрет на расширение
 
 # ---------------------------------------------------------------------------------------
