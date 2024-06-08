@@ -1,6 +1,7 @@
 # импорты
 
 from tkinter import *
+from tkinter import messagebox as mb
 from random import choice
 from plyer import notification
 #from win10toast import ToastNotifier
@@ -17,19 +18,44 @@ def SavePass():
     print(thePass)
     with open("password.txt", "a", encoding="UTF-8") as file: # записываем пароль
         file.write(f"{NameOfService} --->>> {thePass}\n")
-        root.clipboard_clear()
-        root.clipboard_append(thePass)  # вставить в буфер обмена
         #toast.show_toast("Python Manager", "Пароль Сохранён в буфер обмена", "LOGO.ico")
-        notification.notify(message="Пароль скопирован", app_icon="logo.ico")
+        notification.notify(message="Пароль сохранён", app_icon="logo.ico")
+
+
+
+
+
+def clearFile():
+    answer = mb.askyesno(title="Вопрос",message="Вы уверены?")
+    if answer:
+        with open('password.txt', 'w'):
+            pass
+
+def deleteLast():
+    answer1 = mb.askyesno(title="Вопрос", message="Вы уверены?")
+    if answer1:
+        with open('password.txt', 'r') as f:
+            lines = f.readlines()
+            lines = lines[:-1]
+
+        with open('password.txt', 'w') as f:
+            f.writelines(lines)
 
 
 root = Tk()
+
+mainmenu = Menu(root)
+filemenu = Menu(mainmenu, tearoff=0)
+filemenu.add_command(label="Очистить", command= clearFile)
+filemenu.add_command(label="Удалить Последний", command= deleteLast)
+root.config(menu=mainmenu)
+mainmenu.add_cascade(label="Пароли", menu=filemenu)
+
 root.title("Менеджер Паролей")
 root.geometry("600x600")
 root.config(bg = "cyan")
 root.iconbitmap('logo1.ico') # лого
 root.resizable(width=False, height=False) # запрет на расширение
-
 # ---------------------------------------------------------------------------------------
 
 
@@ -84,6 +110,9 @@ btn.place(relx=0.25, y=200, anchor= CENTER)
 
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
+
+
+
 allPass = Label(root,
              text = "Найти Пароль",
              font = ("Comic Sans MS", 13, "bold"),
@@ -121,9 +150,12 @@ def SearchPass():
         thePass = passwords[findService]
         PassWord.delete(0, END)  # Очищаем текстовое поле c
         PassWord.insert(0, thePass)  # Выводим пароль в текстовое поле c
+        root.clipboard_clear()
+        root.clipboard_append(thePass)  # вставить в буфер обмена
     else:
         PassWord.delete(0, END)  # Очищаем текстовое поле c
         PassWord.insert(0, "Сервис Не Найден")  # Выводим сообщение об ошибке
+        notification.notify(message="Сервис Не найден", app_icon="logo.ico")
 #--------------------------------------------------------------------------------------------------------------------------------------
 passWordLabel = Label(root,
              text = "Пароль",
