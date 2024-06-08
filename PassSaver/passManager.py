@@ -4,10 +4,8 @@ from tkinter import *
 from tkinter import messagebox as mb
 from random import choice
 from plyer import notification
-#from win10toast import ToastNotifier
-#toast = ToastNotifier()
-
-
+from win10toast import ToastNotifier
+toast = ToastNotifier()
 
 
 # функции
@@ -18,11 +16,9 @@ def SavePass():
     print(thePass)
     with open("password.txt", "a", encoding="UTF-8") as file: # записываем пароль
         file.write(f"{NameOfService} --->>> {thePass}\n")
-        #toast.show_toast("Python Manager", "Пароль Сохранён в буфер обмена", "LOGO.ico")
         notification.notify(message="Пароль сохранён", app_icon="logo.ico")
-
-
-
+        e.delete(0, END)  # всё с него
+        a.delete(0, END)  # всё с него
 
 
 def clearFile():
@@ -42,14 +38,60 @@ def deleteLast():
             f.writelines(lines)
 
 
+
+
+def BlackBG():
+    root.config(bg="grey")
+def CyanBG():
+    root.config(bg="cyan")
+def RedBG():
+    root.config(bg="red")
+def YellowBG():
+    root.config(bg="yellow")
+
+#---------------------------------------------
+
+
+
+def readEula():
+    a = Toplevel()
+    root.iconbitmap('logo1.ico')  # лого
+    a.geometry('300x300')
+    a['bg'] = 'white'
+    b = Label(root,
+                    text="Бу",
+                    font=("Comic Sans MS", 13, "bold")
+                    )
+    b.place(relx=1, y=50, anchor=CENTER)
+
+#--------------------------------------------------------------
+
 root = Tk()
 
 mainmenu = Menu(root)
+
+
 filemenu = Menu(mainmenu, tearoff=0)
 filemenu.add_command(label="Очистить", command= clearFile)
 filemenu.add_command(label="Удалить Последний", command= deleteLast)
+
+
+helpmenu = Menu(mainmenu, tearoff=0)
+helpmenu.add_command(label="Серый фон", command= BlackBG)
+helpmenu.add_command(label="Бирюзовый Фон", command= CyanBG)
+helpmenu.add_command(label="Красный фон", command= RedBG)
+helpmenu.add_command(label="Жёлтый фон", command= YellowBG)
+
+
+
+window = Menu(mainmenu, tearoff=0)
+window.add_command(label="Прочитать", command= readEula)
+
 root.config(menu=mainmenu)
 mainmenu.add_cascade(label="Пароли", menu=filemenu)
+mainmenu.add_cascade(label="Фон", menu=helpmenu)
+#mainmenu.add_cascade(label="EULA", menu=window)
+
 
 root.title("Менеджер Паролей")
 root.geometry("600x600")
@@ -57,8 +99,6 @@ root.config(bg = "cyan")
 root.iconbitmap('logo1.ico') # лого
 root.resizable(width=False, height=False) # запрет на расширение
 # ---------------------------------------------------------------------------------------
-
-
 
 
 service = Label(root,
@@ -85,12 +125,7 @@ serviceName.place(relx = 0.07, y = 60, anchor=CENTER)
 e = Entry(root, font = "Ariel 13") # текстовое поле
 e.place(relx= 0.3, y=60, anchor=CENTER)  # координаты текстового поля
 
-
-
 # -------------------------------------------------------------------------------------------------------
-
-
-
 
 password = Label(root,
              text = "Пароль",
@@ -110,9 +145,6 @@ btn.place(relx=0.25, y=200, anchor= CENTER)
 
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
 allPass = Label(root,
              text = "Найти Пароль",
              font = ("Comic Sans MS", 13, "bold"),
@@ -130,8 +162,6 @@ ServiceName.place(relx = 0.55, y = 60, anchor=CENTER)
 
 b = Entry(root, font = "Ariel 13") # текстовое поле
 b.place(relx= 0.78, y=60, anchor=CENTER)  # координаты текстового поля
-
-
 
 #---------------------------------------------------------------------------------------------------------------------------------------
 def SearchPass():
@@ -163,36 +193,9 @@ passWordLabel = Label(root,
              )
 passWordLabel.place(relx = 0.55, y = 200, anchor=CENTER)
 
-
-
 PassWord = Entry(root, font = "Ariel 13") # текстовое поле
 PassWord.place(relx= 0.78, y=200, anchor=CENTER)  # координаты текстового поля
 
-
-
 btn1 = Button(root, text="Найти", font= ("Seymour One", 13, "bold"), command=SearchPass) # отпровляемся к функц SavePass
 btn1.place(relx=0.7, y=110, anchor= CENTER)
-
-
-
-
-
-
-
-
-
-root.mainloop()   # показываем окно
-
-
-
-
-
-
-
-
-
-
-
-
-
 root.mainloop()   # показываем окно
