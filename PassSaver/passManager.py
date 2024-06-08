@@ -15,6 +15,7 @@ def SavePass():
     thePass = a.get()
     print(thePass)
     userEmailGet = userEmailText.get()
+    print(userEmailGet)
     with open("password.txt", "a", encoding="UTF-8") as file:  # записываем пароль
         file.write(f"{NameOfService};{thePass};{userEmailGet}\n")
         notification.notify(message="Пароль сохранён", app_icon="logo.ico")
@@ -147,9 +148,8 @@ service = Label(root,
 
              )
 
-# показать кнопку
 service.place(relx = 0.3, y = 110, anchor=CENTER)
-# Сервис Откуда Пароль
+
 
 # -----------------------------------------------------------------------------------------------
 serviceName = Label(root,
@@ -289,7 +289,7 @@ def randomize():
 
 def SavingPass():
     PassPrefix = "Пароль"
-    Pass = e.get() # получить пароль из текст поля
+    Pass = d.get() # получить пароль из текст поля
     root.clipboard_clear()
     root.clipboard_append(Pass) # вставить в буфер обмена
     print(Pass)
@@ -320,8 +320,8 @@ LengthPass.place(relx = 0.2, y = 490, anchor=CENTER)
 
 
 
-e = Entry(root, font = "Ariel 13") # текстовое поле
-e.place(relx= 0.5, y=490, anchor=CENTER)  # координаты текстового поля
+d = Entry(root, font = "Ariel 13") # текстовое поле
+d.place(relx= 0.5, y=490, anchor=CENTER)  # координаты текстового поля
 
 btn = Button(root, text="Сгенерировать", font= ("Seymour One", 17, "bold"), command=randomize) # отпровляемся к функц randomize
 btn.place(relx=0.2, y=570, anchor= CENTER)
