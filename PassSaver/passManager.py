@@ -3,6 +3,7 @@
 from tkinter import *
 from tkinter import messagebox as mb
 from random import choice
+#import json
 from plyer import notification
 
 
@@ -64,12 +65,27 @@ def deleteLast():
 
 def BlackBG():
     root.config(bg="grey")
+    #with open('settings.json', 'w'):
+        #with open("settings.json", "a", encoding="UTF-8") as file:  # записываем выбор
+            #file.write(f"Colour;grey\n")
+
 def CyanBG():
     root.config(bg="cyan")
+    #with open('settings.json', 'w'):
+       # with open("settings.json", "a", encoding="UTF-8") as file:  # записываем выбор
+           # file.write(f"Colour;cyan\n")
+
 def RedBG():
     root.config(bg="red")
+    #with open('settings.json', 'w'):
+       # with open("settings.json", "a", encoding="UTF-8") as file:  # записываем выбор
+            #file.write(f"Colour;red\n")
+
 def YellowBG():
     root.config(bg="yellow")
+    #with open('settings.json', 'w'):
+       # with open("settings.json", "a", encoding="UTF-8") as file:  # записываем выбор
+           # file.write(f"Colour;yellow\n")
 
 #---------------------------------------------
 
