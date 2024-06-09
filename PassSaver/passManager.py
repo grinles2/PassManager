@@ -4,8 +4,6 @@ from tkinter import *
 from tkinter import messagebox as mb
 from random import choice
 from plyer import notification
-from win10toast import ToastNotifier
-toast = ToastNotifier()
 
 
 # функции
@@ -16,7 +14,7 @@ def SavePass():
     print(thePass)
     userEmailGet = userEmailText.get()
     print(userEmailGet)
-    with open("password.txt", "a", encoding="UTF-8") as file:  # записываем пароль
+    with open("AccountPass.txt", "a", encoding="UTF-8") as file:  # записываем пароль
         file.write(f"{NameOfService};{thePass};{userEmailGet}\n")
         notification.notify(message="Пароль сохранён", app_icon="logo.ico")
         e.delete(0, END)  # всё с него
@@ -27,7 +25,7 @@ def SavePass():
 def clearFile():
     answer = mb.askyesno(title="Вопрос",message="Вы уверены?")
     if answer:
-        with open('password.txt', 'w'):
+        with open('AccountPass.txt', 'w'):
             pass
 
 
@@ -45,7 +43,7 @@ def deleteLastPass():
             lines = f.readlines()
             lines = lines[:-1]
 
-        with open('password.txt', 'w') as f:
+        with open('GenPass.txt', 'w') as f:
             f.writelines(lines)
 
 
@@ -54,11 +52,11 @@ def deleteLastPass():
 def deleteLast():
     answer1 = mb.askyesno(title="Вопрос", message="Вы уверены?")
     if answer1:
-        with open('password.txt', 'r') as f:
+        with open('AccountPass', 'r') as f:
             lines = f.readlines()
             lines = lines[:-1]
 
-        with open('password.txt', 'w') as f:
+        with open('AccountPass.txt', 'w') as f:
             f.writelines(lines)
 
 
@@ -94,10 +92,84 @@ root = Tk()
 
 mainmenu = Menu(root)
 
+#---------------------------------------------------------------------------------
+# Функции для страниц
+
+
+def mainPage():
+    pass
+
+def secondPage():
+    root = Tk()
+
+    mainmenu = Menu(root)
+    root.title("Все Сервисы ")
+    root.geometry("600x600")
+    root.config(bg="cyan")
+    root.iconbitmap('logo1.ico')  # лого
+    root.resizable(width=False, height=False)  # запрет на расширение
+
+# -----------------------------------------------------------------------------------
+    #Лейблы
+    Title = Label(root,
+             text = "Менеджер Паролей",
+             font = ("Comic Sans MS", 17, "bold"),
+             )
+
+# показать кнопку
+    Title.place(relx = 0.5, y = 40, anchor=CENTER)
+
+    Title1 = Label(root,
+             text = "Список Сервисов",
+             font = ("Comic Sans MS", 17, "bold"),
+             )
+
+# показать кнопку
+    Title1.place(relx = 0.5, y = 80, anchor=CENTER)
+
+# -----------------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------------
+# Текстовые Поля
+
+    Output = Entry(root, font="Ariel 13")  # текстовое поле
+    Output.place(relx=0.5, y=160, anchor=CENTER)  # координаты текстового поля
+
+
+# -----------------------------------------------------------------------------------
+# функции
+
+    def OutputAllServices():
+        try:
+            with open("AccountPass.txt", "r", encoding="UTF-8") as file:
+                services = [line.strip().split(";")[0] for line in file.readlines()]
+                output_text = " --->>> ".join(services)
+                Output.delete(0, END)  # Очищаем текстовое поле
+                Output.insert(END, output_text)  # Выводим имена сервисов в текстовое поле
+        except FileNotFoundError:
+            Output.insert(0, "Файл Утерян или не найден")
+            notification.notify(message="Файл не найден или утерян или вы не сохранили пароли ещё", app_icon="logo.ico")
+
+
+
+    # Кнопки
+    btn = Button(root, text="Вывести", font=("Seymour One", 17, "bold"),command=OutputAllServices)  # отпровляемся к функц OutputAllServices
+    btn.place(relx=0.5, y=300, anchor=CENTER)
+
+
+
+# -----------------------------------------------------------------------------------
+# Маин лооп
+    root.mainloop()
+
+
+# -----------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------
 
 filemenu = Menu(mainmenu, tearoff=0)
-filemenu.add_command(label="Очистить Все", command= clearFile)
-filemenu.add_command(label="Удалить Последний", command= deleteLast)
+filemenu.add_command(label="Очистить Все Аккаунты", command= clearFile)
+filemenu.add_command(label="Удалить Последний Аккаунт", command= deleteLast)
 
 helpmenu = Menu(mainmenu, tearoff=0)
 helpmenu.add_command(label="Серый фон", command= BlackBG)
@@ -107,18 +179,24 @@ helpmenu.add_command(label="Жёлтый фон", command= YellowBG)
 
 
 passwordList = Menu(mainmenu, tearoff=0)
-passwordList.add_command(label="Очистить Сохраннёные Пароли", command= clearPass)
+passwordList.add_command(label="Очистить Все Сохраннёные Пароли", command= clearPass)
 passwordList.add_command(label="Удалить последний пароль", command= deleteLastPass)
 
 
 window = Menu(mainmenu, tearoff=0)
 window.add_command(label="Прочитать", command= readEula)
 
+
+pagemenu = Menu(mainmenu, tearoff=0)
+pagemenu.add_command(label="Список всех сервисов", command= secondPage)
+
 root.config(menu=mainmenu)
-mainmenu.add_cascade(label="Аккаунты", menu=filemenu)
-mainmenu.add_cascade(label="Пароли", menu=passwordList)
+mainmenu.add_cascade(label="Менеджер Паролей", menu=filemenu)
+mainmenu.add_cascade(label="Генератор Паролей", menu=passwordList)
 mainmenu.add_cascade(label="Фон", menu=helpmenu)
+mainmenu.add_cascade(label="Дополнительно", menu=pagemenu)
 #mainmenu.add_cascade(label="EULA", menu=window)
+
 
 
 root.title("Менеджер Паролей")
@@ -155,7 +233,6 @@ service.place(relx = 0.3, y = 110, anchor=CENTER)
 serviceName = Label(root,
              text = "Сервис",
              font = ("Comic Sans MS", 13, "bold"),
-
              )
 serviceName.place(relx = 0.07, y = 160, anchor=CENTER)
 
@@ -170,7 +247,6 @@ e.place(relx= 0.3, y=160, anchor=CENTER)  # координаты текстов�
 password = Label(root,
              text = "Пароль",
              font = ("Comic Sans MS", 13, "bold"),
-
              )
 
 password.place(relx = 0.07, y = 260, anchor=CENTER)
@@ -183,7 +259,6 @@ a.place(relx= 0.3, y=260, anchor=CENTER)  # координаты текстов�
 userEmail = Label(root,
              text = "Доп",
              font = ("Comic Sans MS", 13, "bold"),
-
              )
 
 userEmail.place(relx = 0.07, y = 210, anchor=CENTER)
@@ -223,7 +298,7 @@ def SearchPass():
     findService = b.get()   # из текстового поля ServiceName
     print(findService)
 
-    with open("password.txt", "r", encoding="UTF-8") as file:  # Читаем пароли из файла
+    with open("AccountPass.txt", "r", encoding="UTF-8") as file:  # Читаем пароли из файла
         lines = file.readlines()
 
     passwords = {}
@@ -281,10 +356,10 @@ btn1.place(relx=0.752, y=210, anchor= CENTER)
 # генератор пароля
 
 def randomize():
-    PassL = e.get() # получаем длину пороля
-    e.delete(0, END) # всё с него
+    PassL = d.get() # получаем длину пороля
+    d.delete(0, END) # всё с него
     for i in range(int(PassL)):
-        e.insert(0, choice(alphabet)) # добавляем пароль в текст поле
+        d.insert(0, choice(alphabet)) # добавляем пароль в текст поле
 
 
 def SavingPass():
@@ -295,6 +370,8 @@ def SavingPass():
     print(Pass)
     with open("GenPass.txt", "a", encoding="UTF-8") as file: # записываем пароль
         file.write(f"{PassPrefix} --->>> {Pass}\n")
+        d.delete(0, END)
+        notification.notify(message="Пароль Сохранён В буфер Обмена", app_icon="logo.ico")
 
 alphabet = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
             "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "t", "u", "v", "w", "x", "y", "z",
