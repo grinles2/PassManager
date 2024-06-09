@@ -131,7 +131,6 @@ def secondPage():
              text = "Менеджер Паролей",
              font = ("Comic Sans MS", 17, "bold"),
              )
-
 # показать кнопку
     Title.place(relx = 0.5, y = 40, anchor=CENTER)
 
