@@ -14,7 +14,7 @@ def SavePass():
     print(thePass)
     userEmailGet = userEmailText.get()
     print(userEmailGet)
-    with open("AccountPass.txt", "a", encoding="UTF-8") as file:  # записываем пароль
+    with open("AccountPass.json", "a", encoding="UTF-8") as file:  # записываем пароль
         file.write(f"{NameOfService};{thePass};{userEmailGet}\n")
         notification.notify(message="Пароль сохранён", app_icon="logo.ico")
         e.delete(0, END)  # всё с него
@@ -25,25 +25,25 @@ def SavePass():
 def clearFile():
     answer = mb.askyesno(title="Вопрос",message="Вы уверены?")
     if answer:
-        with open('AccountPass.txt', 'w'):
+        with open('AccountPass.json', 'w'):
             pass
 
 
 def clearPass():
     answer = mb.askyesno(title="Вопрос",message="Вы уверены?")
     if answer:
-        with open('GenPass.txt', 'w'):
+        with open('GenPass.json', 'w'):
             pass
 
 
 def deleteLastPass():
     answer1 = mb.askyesno(title="Вопрос", message="Вы уверены?")
     if answer1:
-        with open('GenPass.txt', 'r') as f:
+        with open('GenPass.json', 'r') as f:
             lines = f.readlines()
             lines = lines[:-1]
 
-        with open('GenPass.txt', 'w') as f:
+        with open('GenPass.json', 'w') as f:
             f.writelines(lines)
 
 
@@ -52,11 +52,11 @@ def deleteLastPass():
 def deleteLast():
     answer1 = mb.askyesno(title="Вопрос", message="Вы уверены?")
     if answer1:
-        with open('AccountPass', 'r') as f:
+        with open('AccountPass.json', 'r') as f:
             lines = f.readlines()
             lines = lines[:-1]
 
-        with open('AccountPass.txt', 'w') as f:
+        with open('AccountPass.json', 'w') as f:
             f.writelines(lines)
 
 
@@ -141,7 +141,7 @@ def secondPage():
 
     def OutputAllServices():
         try:
-            with open("AccountPass.txt", "r", encoding="UTF-8") as file:
+            with open("AccountPass.json", "r", encoding="UTF-8") as file:
                 services = [line.strip().split(";")[0] for line in file.readlines()]
                 output_text = " --->>> ".join(services)
                 Output.delete(0, END)  # Очищаем текстовое поле
@@ -298,7 +298,7 @@ def SearchPass():
     findService = b.get()   # из текстового поля ServiceName
     print(findService)
 
-    with open("AccountPass.txt", "r", encoding="UTF-8") as file:  # Читаем пароли из файла
+    with open("AccountPass.json", "r", encoding="UTF-8") as file:  # Читаем пароли из файла
         lines = file.readlines()
 
     passwords = {}
@@ -368,7 +368,7 @@ def SavingPass():
     root.clipboard_clear()
     root.clipboard_append(Pass) # вставить в буфер обмена
     print(Pass)
-    with open("GenPass.txt", "a", encoding="UTF-8") as file: # записываем пароль
+    with open("GenPass.json", "a", encoding="UTF-8") as file: # записываем пароль
         file.write(f"{PassPrefix} --->>> {Pass}\n")
         d.delete(0, END)
         notification.notify(message="Пароль Сохранён В буфер Обмена", app_icon="logo.ico")
