@@ -112,7 +112,16 @@ mainmenu = Menu(root)
 # Функции для страниц
 
 
-def mainPage():
+def clearField():
+    PassWord.delete(0, END)
+    ExtraText.delete(0, END)
+    b.delete(0, END)
+
+def clearField1():
+    d.delete(0, END)
+
+
+
     pass
 
 def secondPage():
@@ -122,7 +131,7 @@ def secondPage():
     root.title("Все Сервисы ")
     root.geometry("600x600")
     root.config(bg="cyan")
-    root.iconbitmap('logo1.ico')  # лого
+    root.iconbitmap('logo.ico')  # лого
     root.resizable(width=False, height=False)  # запрет на расширение
 
 # -----------------------------------------------------------------------------------
@@ -217,7 +226,7 @@ mainmenu.add_cascade(label="Дополнительно", menu=pagemenu)
 root.title("Менеджер Паролей")
 root.geometry("600x600")
 root.config(bg = "cyan")
-root.iconbitmap('logo1.ico') # лого
+root.iconbitmap('logo.ico') # лого
 root.resizable(width=False, height=False) # запрет на расширение
 # ---------------------------------------------------------------------------------------
 
@@ -365,16 +374,33 @@ PassWord = Entry(root, font = "Ariel 13") # текстовое поле
 PassWord.place(relx= 0.78, y=300, anchor=CENTER)  # координаты текстового поля
 # -----------------------------------------------------------------------------------------------------------------------------------------
 btn1 = Button(root, text="Найти", font= ("Seymour One", 13, "bold"), command=SearchPass) # отпровляемся к функц SavePass
-btn1.place(relx=0.752, y=210, anchor= CENTER)
+btn1.place(relx=0.7, y=210, anchor= CENTER)
+
+btn2 = Button(root, text="Очистить", font= ("Seymour One", 13, "bold"), command=clearField) # отпровляемся к функц clearField
+btn2.place(relx=0.87, y=210, anchor= CENTER)
 
 # -----------------------------------------------------------------------------------------------------------------------------------------
 # генератор пароля
 
 def randomize():
-    PassL = d.get() # получаем длину пороля
-    d.delete(0, END) # всё с него
+    PassL = d.get()  # получаем длину пароля
+    allowedPassL = 19
+    try:
+        PassL = int(PassL)  # преобразуем строку в целое число
+        if PassL > allowedPassL:
+            d.delete(0, END)
+            d.insert(0, "Превышен Лимит")
+            notification.notify(message="Превышен лимит на длину пароля", app_icon="logo.ico")
+            return  # выходим из функции, чтобы не продолжать генерацию пароля
+    except ValueError:  # если не удается преобразовать в целое число
+        d.delete(0, END)
+        d.insert(0, "Некорректный ввод")
+        notification.notify(message="Некорректный ввод длины пароля", app_icon="logo.ico")
+        return  # выходим из функции, чтобы не продолжать генерацию пароля
+
+    d.delete(0, END)  # очищаем текстовое поле
     for i in range(int(PassL)):
-        d.insert(0, choice(alphabet)) # добавляем пароль в текст поле
+        d.insert(0, choice(alphabet))  # добавляем символы в текстовое поле
 
 
 def SavingPass():
@@ -415,11 +441,14 @@ LengthPass.place(relx = 0.2, y = 490, anchor=CENTER)
 d = Entry(root, font = "Ariel 13") # текстовое поле
 d.place(relx= 0.5, y=490, anchor=CENTER)  # координаты текстового поля
 
-btn = Button(root, text="Сгенерировать", font= ("Seymour One", 17, "bold"), command=randomize) # отпровляемся к функц randomize
+btn = Button(root, text="Сгенерировать", font= ("Seymour One", 15, "bold"), command=randomize) # отпровляемся к функц randomize
 btn.place(relx=0.2, y=570, anchor= CENTER)
 
-btn = Button(root, text="Сохранить Пароль", font= ("Seymour One", 17, "bold"), command=SavingPass) # отпровляемся к функц SavePass
-btn.place(relx=0.7, y=570, anchor= CENTER)
+btn4 = Button(root, text="Сохранить Пароль", font= ("Seymour One", 15, "bold"), command=SavingPass) # отпровляемся к функц SavePass
+btn4.place(relx=0.55, y=570, anchor= CENTER)
+
+btn3 = Button(root, text="Очистить", font= ("Seymour One", 15, "bold"), command=clearField1) # отпровляемся к функц SavePass
+btn3.place(relx=0.85, y=570, anchor= CENTER)
 
 
 
