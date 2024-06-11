@@ -10,17 +10,17 @@ from plyer import notification
 
 # функции
 def SavePass():
-    NameOfService = e.get()
+    NameOfService = ServiceEntry.get()
     print(NameOfService)
-    thePass = a.get()
+    thePass = PassEntry.get()
     print(thePass)
     userEmailGet = userEmailText.get()
     print(userEmailGet)
-    with open("AccountPass.json", "a", encoding="UTF-8") as file:  # записываем пароль
+    with open("AccPass.json", "a", encoding="UTF-8") as file:  # записываем пароль
         file.write(f"{NameOfService};{thePass};{userEmailGet}\n")
         notification.notify(message="Пароль сохранён", app_icon="logo.ico")
-        e.delete(0, END)  # всё с него
-        a.delete(0, END)  # всё с него
+        ServiceEntry.delete(0, END)  # всё с него
+        PassEntry.delete(0, END)  # всё с него
         userEmailText.delete(0, END)  # всё с него
 
 
@@ -28,7 +28,7 @@ def clearFile():
     try:
         answer = mb.askyesno(title="Вопрос",message="Вы уверены? Аккаунты будут удалены навсегда")
         if answer:
-            os.remove("AccountPass.json")
+            os.remove("AccPass.json")
     except FileNotFoundError:
         notification.notify(message="Файл Утерян/Повреждён/Пароль не был сохранён прежде", app_icon="logo.ico")
 
@@ -46,11 +46,10 @@ def deleteLast():
     try:
         answer1 = mb.askyesno(title="Вопрос", message="Вы уверены?")
         if answer1:
-            with open('AccountPass.json', 'r') as f:
+            with open('AccPass.json', 'r') as f:
                 lines = f.readlines()
                 lines = lines[:-1]
-
-            with open('AccountPass.json', 'w') as f:
+            with open('AccPass.json', 'w') as f:
                 f.writelines(lines)
     except FileNotFoundError:
         notification.notify(message="Файл Утерян/Повреждён/Пароль не был сохранён прежде", app_icon="logo.ico")
@@ -107,10 +106,10 @@ mainmenu = Menu(root)
 def clearField():
     PassWord.delete(0, END)
     ExtraText.delete(0, END)
-    b.delete(0, END)
+    SecondServiceEntry.delete(0, END)
 
 def clearField1():
-    d.delete(0, END)
+    passwordEntry.delete(0, END)
 
 
 def secondPage():
@@ -154,7 +153,7 @@ def secondPage():
 
     def OutputAllServices():
         try:
-            with open("AccountPass.json", "r", encoding="UTF-8") as file:
+            with open("AccPass.json", "r", encoding="UTF-8") as file:
                 services = [line.strip().split(";")[0] for line in file.readlines()]
                 output_text = " --->>> ".join(services)
                 Output.delete(0, END)  # Очищаем текстовое поле
@@ -166,8 +165,8 @@ def secondPage():
 
 
     # Кнопки
-    btn = Button(root, text="Вывести", font=("Seymour One", 17, "bold"),command=OutputAllServices)  # отпровляемся к функц OutputAllServices
-    btn.place(relx=0.5, y=300, anchor=CENTER)
+    OutputButton = Button(root, text="Вывести", font=("Seymour One", 17, "bold"),command=OutputAllServices)  # отпровляемся к функц OutputAllServices
+    OutputButton.place(relx=0.5, y=300, anchor=CENTER)
 
 
 
@@ -187,8 +186,8 @@ filemenu.add_command(label="Удалить Последний Аккаунт", c
 helpmenu = Menu(mainmenu, tearoff=0)
 helpmenu.add_command(label="Серый фон", command= BlackBG)
 helpmenu.add_command(label="Бирюзовый Фон", command= CyanBG)
-helpmenu.add_command(label="Красный фон", command= RedBG)
 helpmenu.add_command(label="Жёлтый фон", command= YellowBG)
+helpmenu.add_command(label="Красный фон", command= RedBG)
 
 
 passwordList = Menu(mainmenu, tearoff=0)
@@ -251,8 +250,8 @@ serviceName.place(relx = 0.07, y = 160, anchor=CENTER)
 
 
 
-e = Entry(root, font = "Ariel 13") # текстовое поле
-e.place(relx= 0.3, y=160, anchor=CENTER)  # координаты текстового поля
+ServiceEntry = Entry(root, font = "Ariel 13") # текстовое поле
+ServiceEntry.place(relx= 0.3, y=160, anchor=CENTER)  # координаты текстового поля
 
 # -------------------------------------------------------------------------------------------------------
 
@@ -263,8 +262,8 @@ password = Label(root,
 
 password.place(relx = 0.07, y = 260, anchor=CENTER)
 
-a = Entry(root, font = "Ariel 13") # текстовое поле
-a.place(relx= 0.3, y=260, anchor=CENTER)  # координаты текстового поля
+PassEntry = Entry(root, font = "Ariel 13") # текстовое поле
+PassEntry.place(relx= 0.3, y=260, anchor=CENTER)  # координаты текстового поля
 
 
 
@@ -280,8 +279,8 @@ userEmailText = Entry(root, font = "Ariel 13") # текстовое поле
 userEmailText.place(relx= 0.3, y=210, anchor=CENTER)  # координаты текстового поля
 
 
-btn = Button(root, text="Сохранить", font= ("Seymour One", 13, "bold"), command=SavePass)  # отпровляемся к функц SavePass
-btn.place(relx=0.25, y=300, anchor= CENTER)
+ButtonSave = Button(root, text="Сохранить", font= ("Seymour One", 13, "bold"), command=SavePass)  # отпровляемся к функц SavePass
+ButtonSave.place(relx=0.25, y=300, anchor= CENTER)
 
 
 #--------------------------------------------------------------------------------------------------------------------------------------------
@@ -301,40 +300,40 @@ ServiceName.place(relx = 0.55, y = 160, anchor=CENTER)
 
 
 
-b = Entry(root, font = "Ariel 13") # текстовое поле
-b.place(relx= 0.78, y=160, anchor=CENTER)  # координаты текстового поля
+SecondServiceEntry = Entry(root, font = "Ariel 13") # текстовое поле
+SecondServiceEntry.place(relx= 0.78, y=160, anchor=CENTER)  # координаты текстового поля
 
 #---------------------------------------------------------------------------------------------------------------------------------------
 
 def SearchPass():
-    findService = b.get()   # из текстового поля ServiceName
-    print(findService)
-
-    with open("AccountPass.json", "r", encoding="UTF-8") as file:  # Читаем пароли из файла
-        lines = file.readlines()
-
-    passwords = {}
-    for line in lines:
-        parts = line.strip().split(";")  # Разделяем строку на части по символу ";"
-        if len(parts) == 3:  # Проверяем, что в строке есть три части
-            service, password, extra = parts
-            passwords[service] = (password, extra)
-
-    if findService in passwords:  # Проверяем, есть ли введенный сервис в словаре паролей
-        thePass, extra = passwords[findService]
-        PassWord.delete(0, END)  # Очищаем текстовое поле c
-        userEmailText.delete(0, END)  # Очищаем текстовое поле userEmailText
-        ExtraText.delete(0, END)  # Очищаем текстовое поле ExtraText
-        PassWord.insert(0, thePass)  # Выводим пароль в текстовое поле c
-        ExtraText.insert(0, extra)  # Выводим дополнительную информацию в текстовое поле ExtraText
-        root.clipboard_clear()
-        root.clipboard_append(thePass)  # вставить в буфер обмена
-    else:
-        PassWord.delete(0, END)  # Очищаем текстовое поле c
-        userEmailText.delete(0, END)  # Очищаем текстовое поле userEmailText
-        ExtraText.delete(0, END)  # Очищаем текстовое поле ExtraText
-        PassWord.insert(0, "Сервис Не Найден")  # Выводим сообщение об ошибке
-        notification.notify(message="Сервис Не найден", app_icon="logo.ico")
+    try:
+        findService = SecondServiceEntry.get()   # из текстового поля ServiceName
+        print(findService)
+        with open("AccPass.json", "r", encoding="UTF-8") as file:  # Читаем пароли из файла
+            lines = file.readlines()
+        passwords = {}
+        for line in lines:
+            parts = line.strip().split(";")  # Разделяем строку на части по символу ";"
+            if len(parts) == 3:  # Проверяем, что в строке есть три части
+                service, password, extra = parts
+                passwords[service] = (password, extra)
+        if findService in passwords:  # Проверяем, есть ли введенный сервис в словаре паролей
+            thePass, extra = passwords[findService]
+            PassWord.delete(0, END)  # Очищаем текстовое поле c
+            userEmailText.delete(0, END)  # Очищаем текстовое поле userEmailText
+            ExtraText.delete(0, END)  # Очищаем текстовое поле ExtraText
+            PassWord.insert(0, thePass)  # Выводим пароль в текстовое поле c
+            ExtraText.insert(0, extra)  # Выводим дополнительную информацию в текстовое поле ExtraText
+            root.clipboard_clear()
+            root.clipboard_append(thePass)  # вставить в буфер обмена
+        else:
+            PassWord.delete(0, END)  # Очищаем текстовое поле c
+            userEmailText.delete(0, END)  # Очищаем текстовое поле userEmailText
+            ExtraText.delete(0, END)  # Очищаем текстовое поле ExtraText
+            PassWord.insert(0, "Сервис Не Найден")  # Выводим сообщение об ошибке
+            notification.notify(message="Сервис Не найден", app_icon="logo.ico")
+    except FileNotFoundError:
+        notification.notify(message="Файл Утерян/Повреждён/Пароль не был сохранён прежде", app_icon="logo.ico")
 
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -361,45 +360,45 @@ passWordLabel.place(relx = 0.55, y = 300, anchor=CENTER)
 PassWord = Entry(root, font = "Ariel 13") # текстовое поле
 PassWord.place(relx= 0.78, y=300, anchor=CENTER)  # координаты текстового поля
 # -----------------------------------------------------------------------------------------------------------------------------------------
-btn1 = Button(root, text="Найти", font= ("Seymour One", 13, "bold"), command=SearchPass) # отпровляемся к функц SavePass
-btn1.place(relx=0.7, y=210, anchor= CENTER)
+ButFind = Button(root, text="Найти", font= ("Seymour One", 13, "bold"), command=SearchPass) # отпровляемся к функц SavePass
+ButFind.place(relx=0.7, y=210, anchor= CENTER)
 
-btn2 = Button(root, text="Очистить", font= ("Seymour One", 13, "bold"), command=clearField) # отпровляемся к функц clearField
-btn2.place(relx=0.87, y=210, anchor= CENTER)
+ButClear = Button(root, text="Очистить", font= ("Seymour One", 13, "bold"), command=clearField) # отпровляемся к функц clearField
+ButClear.place(relx=0.87, y=210, anchor= CENTER)
 
 # -----------------------------------------------------------------------------------------------------------------------------------------
 # генератор пароля
 
 def randomize():
-    PassL = d.get()  # получаем длину пароля
+    PassL = passwordEntry.get()  # получаем длину пароля
     allowedPassL = 19
     try:
         PassL = int(PassL)  # преобразуем строку в целое число
         if PassL > allowedPassL:
-            d.delete(0, END)
-            d.insert(0, "Превышен Лимит")
+            passwordEntry.delete(0, END)
+            passwordEntry.insert(0, "Превышен Лимит")
             notification.notify(message="Превышен лимит на длину пароля", app_icon="logo.ico")
             return  # выходим из функции, чтобы не продолжать генерацию пароля
     except ValueError:  # если не удается преобразовать в целое число
-        d.delete(0, END)
-        d.insert(0, "Некорректный ввод")
+        passwordEntry.delete(0, END)
+        passwordEntry.insert(0, "Некорректный ввод")
         notification.notify(message="Некорректный ввод длины пароля", app_icon="logo.ico")
         return  # выходим из функции, чтобы не продолжать генерацию пароля
 
-    d.delete(0, END)  # очищаем текстовое поле
+    passwordEntry.delete(0, END)  # очищаем текстовое поле
     for i in range(int(PassL)):
-        d.insert(0, choice(alphabet))  # добавляем символы в текстовое поле
+        passwordEntry.insert(0, choice(alphabet))  # добавляем символы в текстовое поле
 
 
 def SavingPass():
     PassPrefix = "Пароль"
-    Pass = d.get() # получить пароль из текст поля
+    Pass = passwordEntry.get() # получить пароль из текст поля
     root.clipboard_clear()
     root.clipboard_append(Pass) # вставить в буфер обмена
     print(Pass)
     with open("GenPass.json", "a", encoding="UTF-8") as file: # записываем пароль
         file.write(f"{PassPrefix} --->>> {Pass}\n")
-        d.delete(0, END)
+        passwordEntry.delete(0, END)
         notification.notify(message="Пароль Сохранён В буфер Обмена", app_icon="logo.ico")
 
 alphabet = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
@@ -426,17 +425,17 @@ LengthPass.place(relx = 0.2, y = 490, anchor=CENTER)
 
 
 
-d = Entry(root, font = "Ariel 13") # текстовое поле
-d.place(relx= 0.5, y=490, anchor=CENTER)  # координаты текстового поля
+passwordEntry = Entry(root, font = "Ariel 13") # текстовое поле
+passwordEntry.place(relx= 0.5, y=490, anchor=CENTER)  # координаты текстового поля
 
-btn = Button(root, text="Сгенерировать", font= ("Seymour One", 15, "bold"), command=randomize) # отпровляемся к функц randomize
-btn.place(relx=0.2, y=570, anchor= CENTER)
+ButGen = Button(root, text="Сгенерировать", font= ("Seymour One", 15, "bold"), command=randomize) # отпровляемся к функц randomize
+ButGen.place(relx=0.2, y=570, anchor= CENTER)
 
-btn4 = Button(root, text="Сохранить Пароль", font= ("Seymour One", 15, "bold"), command=SavingPass) # отпровляемся к функц SavePass
-btn4.place(relx=0.55, y=570, anchor= CENTER)
+ButSave = Button(root, text="Сохранить Пароль", font= ("Seymour One", 15, "bold"), command=SavingPass) # отпровляемся к функц SavePass
+ButSave.place(relx=0.55, y=570, anchor= CENTER)
 
-btn3 = Button(root, text="Очистить", font= ("Seymour One", 15, "bold"), command=clearField1) # отпровляемся к функц SavePass
-btn3.place(relx=0.85, y=570, anchor= CENTER)
+ButClear = Button(root, text="Очистить", font= ("Seymour One", 15, "bold"), command=clearField1) # отпровляемся к функц SavePass
+ButClear.place(relx=0.85, y=570, anchor= CENTER)
 
 
 
