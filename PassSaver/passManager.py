@@ -30,6 +30,7 @@ def clearFile():
         if answer:
             os.remove("AccPass.json")
     except FileNotFoundError:
+        print("Файл Не найден")
         notification.notify(message="Файл Утерян/Повреждён/Пароль не был сохранён прежде", app_icon="logo.ico")
 
 
@@ -39,6 +40,7 @@ def clearPass():
         if answer:
             os.remove("GenPass.json")
     except FileNotFoundError:
+        print("Файл Не найден")
         notification.notify(message="Файл Утерян/Повреждён/Пароль не был сохранён прежде", app_icon="logo.ico")
 
 
@@ -52,6 +54,7 @@ def deleteLast():
             with open('AccPass.json', 'w') as f:
                 f.writelines(lines)
     except FileNotFoundError:
+        print("Файл Не найден")
         notification.notify(message="Файл Утерян/Повреждён/Пароль не был сохранён прежде", app_icon="logo.ico")
 
 def BlackBG():
@@ -333,6 +336,7 @@ def SearchPass():
             PassWord.insert(0, "Сервис Не Найден")  # Выводим сообщение об ошибке
             notification.notify(message="Сервис Не найден", app_icon="logo.ico")
     except FileNotFoundError:
+        print("Файл Не найден")
         notification.notify(message="Файл Утерян/Повреждён/Пароль не был сохранён прежде", app_icon="logo.ico")
 
 # -----------------------------------------------------------------------------------------------------------------------------------------
