@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter import messagebox as mb
 from random import choice
 #import json
+import os
 from plyer import notification
 
 
@@ -24,44 +25,35 @@ def SavePass():
 
 
 def clearFile():
-    answer = mb.askyesno(title="Вопрос",message="Вы уверены?")
-    if answer:
-        with open('AccountPass.json', 'w'):
-            pass
+    try:
+        answer = mb.askyesno(title="Вопрос",message="Вы уверены? Аккаунты будут удалены навсегда")
+        if answer:
+            os.remove("AccountPass.json")
+    except FileNotFoundError:
+        notification.notify(message="Файл Утерян/Повреждён/Пароль не был сохранён прежде", app_icon="logo.ico")
 
 
 def clearPass():
-    answer = mb.askyesno(title="Вопрос",message="Вы уверены?")
-    if answer:
-        with open('GenPass.json', 'w'):
-            pass
-
-
-def deleteLastPass():
-    answer1 = mb.askyesno(title="Вопрос", message="Вы уверены?")
-    if answer1:
-        with open('GenPass.json', 'r') as f:
-            lines = f.readlines()
-            lines = lines[:-1]
-
-        with open('GenPass.json', 'w') as f:
-            f.writelines(lines)
-
-
+    try:
+        answer = mb.askyesno(title="Вопрос",message="Вы уверены? Пароли будут удалены навсегда")
+        if answer:
+            os.remove("GenPass.json")
+    except FileNotFoundError:
+        notification.notify(message="Файл Утерян/Повреждён/Пароль не был сохранён прежде", app_icon="logo.ico")
 
 
 def deleteLast():
-    answer1 = mb.askyesno(title="Вопрос", message="Вы уверены?")
-    if answer1:
-        with open('AccountPass.json', 'r') as f:
-            lines = f.readlines()
-            lines = lines[:-1]
+    try:
+        answer1 = mb.askyesno(title="Вопрос", message="Вы уверены?")
+        if answer1:
+            with open('AccountPass.json', 'r') as f:
+                lines = f.readlines()
+                lines = lines[:-1]
 
-        with open('AccountPass.json', 'w') as f:
-            f.writelines(lines)
-
-
-
+            with open('AccountPass.json', 'w') as f:
+                f.writelines(lines)
+    except FileNotFoundError:
+        notification.notify(message="Файл Утерян/Повреждён/Пароль не был сохранён прежде", app_icon="logo.ico")
 
 def BlackBG():
     root.config(bg="grey")
@@ -121,9 +113,6 @@ def clearField1():
     d.delete(0, END)
 
 
-
-    pass
-
 def secondPage():
     root = Tk()
 
@@ -172,7 +161,7 @@ def secondPage():
                 Output.insert(END, output_text)  # Выводим имена сервисов в текстовое поле
         except FileNotFoundError:
             Output.insert(0, "Файл Утерян или не найден")
-            notification.notify(message="Файл не найден или утерян или вы не сохранили пароли ещё", app_icon="logo.ico")
+            notification.notify(message="Файл Утерян/Повреждён/Пароль не был сохранён прежде", app_icon="logo.ico")
 
 
 
@@ -203,8 +192,7 @@ helpmenu.add_command(label="Жёлтый фон", command= YellowBG)
 
 
 passwordList = Menu(mainmenu, tearoff=0)
-passwordList.add_command(label="Очистить Все Сохраннёные Пароли", command= clearPass)
-passwordList.add_command(label="Удалить последний пароль", command= deleteLastPass)
+passwordList.add_command(label="Очистить КЭШ Пароли", command= clearPass)
 
 
 window = Menu(mainmenu, tearoff=0)
